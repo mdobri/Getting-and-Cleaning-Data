@@ -1,7 +1,7 @@
 library(plyr)
 library(data.table)
 library(utils)
-
+library(reshape2)
 
 ###load generic data
 activities<-data.table(read.table("activity_labels.txt"))
@@ -59,3 +59,7 @@ xyfilt<-rbind(xyfilt,xyte[,colvect,with=FALSE])
 
 ### modify column names: all to lowercase; remove >(),-< 
 colnames(xyfilt)<-gsub("[(),-]","",tolower(colnames(xyfilt)))
+
+xymelt<-melt(xyfilt,id=c("subject","activityname"))
+xy<-dcast(xymelt,subject+activityname~variable,mean)
+write.table(xy,"wearable.txt",row.name=FALSE)
