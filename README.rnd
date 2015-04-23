@@ -1,0 +1,31 @@
+Description of run_analysis.R
+
+Purpose: create average of each mean and standard deviation (std) value found in original data set training and test data
+Link to original data:
+https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+
+Analysis of input:
+	activity_labels.txt: 2 columns * 6 rows
+	features.txt: 561 column labels for "X" files
+	X_train.txt: 561 columns * 7352 rows
+	y_train.txt: 1 column * 7352 rows
+	subject_train.txt: 1 column * 7352 rows
+	X_train.txt: 561 columns * 2947 rows
+	y_train.txt: 1 column * 2947 rows
+	subject_test.txt: 1 column * 2947 rows	
+
+Program logic:
+	- load X_train file 561 columns to DT xtr
+	- update xtr column names with the 561 column labels of features.txt
+	- column bind y_train.txt single columns to xtr as activitycode
+	- column bind subject_train.txt single columns to xtr as subject
+	- map activitycode values to the activityname values found in activity_labels.txt, add mapped values to xtr as activityname
+	- create integer vector of column labels of xtr containing [Mm]ean, [Ss]td, activityname or subject
+	- subset xtr with the vector to xyfilt
+	- repeat steps 1-5 for test data set, row bind result to xyfilt
+	- tidy column labels of xyfilt by removing all the following characters: (),-
+	- melt xyfilt by subject and activityname
+	- dcast result by subject and activityname with mean function to xy
+	- write result with write.table row.name=FALSE
+
+For codebook please refer to github https://github.com/mdobri/Getting-and-Cleaning-Data/blob/master/codebook.txt
